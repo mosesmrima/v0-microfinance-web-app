@@ -1,17 +1,20 @@
 "use client"
 
-import { InstitutionHeader } from "@/components/institution/institution-header"
+import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { InstitutionStats } from "@/components/institution/institution-stats"
 import { LoanManagementTable } from "@/components/institution/loan-management-table"
 import { LoanProductsManager } from "@/components/institution/loan-products-manager"
-import { mockInstitutionProfile, mockLoans, mockLoanProducts } from "@/lib/mock-data"
+import { mockLoans, mockLoanProducts } from "@/lib/mock-data"
 
 export default function InstitutionPage() {
   return (
-    <div className="min-h-screen bg-background">
-      <InstitutionHeader profile={mockInstitutionProfile} />
+    <DashboardLayout>
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-foreground">Institution Dashboard</h1>
+          <p className="text-muted-foreground mt-2">Manage your loan products and applications</p>
+        </div>
 
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="grid gap-8">
           {/* Statistics */}
           <InstitutionStats loans={mockLoans} products={mockLoanProducts} />
@@ -22,7 +25,7 @@ export default function InstitutionPage() {
           {/* Loan Management */}
           <LoanManagementTable loans={mockLoans} />
         </div>
-      </main>
-    </div>
+      </div>
+    </DashboardLayout>
   )
 }
