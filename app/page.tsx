@@ -35,7 +35,7 @@ export default function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden px-4 py-20 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden px-4 sm:px-6 lg:px-8 flex items-center justify-center min-h-[calc(100vh-4rem)]">
         <div className="mx-auto max-w-7xl">
           <div className="text-center">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2">
