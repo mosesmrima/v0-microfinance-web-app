@@ -1,5 +1,11 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "About Us",
+  description: "Learn about FinFlow's mission to provide accessible microfinance solutions.",
+}
 
 export default function AboutPage() {
   return (

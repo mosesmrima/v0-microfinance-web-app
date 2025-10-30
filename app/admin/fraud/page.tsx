@@ -1,9 +1,13 @@
-"use client"
-
+import type { Metadata } from "next"
 import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { FraudDetectionStats } from "@/components/fraud/fraud-detection-stats"
 import { FraudAlertsList } from "@/components/fraud/fraud-alerts-list"
 import { mockFraudAlerts } from "@/lib/mock-data"
+
+export const metadata: Metadata = {
+  title: "Fraud Detection",
+  description: "Monitor and review flagged loan applications.",
+}
 
 export default function AdminFraudPage() {
   const highRiskCount = mockFraudAlerts.filter((f) => f.risk_score >= 60).length

@@ -1,10 +1,14 @@
-"use client"
-
+import type { Metadata } from "next"
 import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { PaymentOverview } from "@/components/payments/payment-overview"
 import { MakePaymentForm } from "@/components/payments/make-payment-form"
 import { PaymentHistory } from "@/components/payments/payment-history"
 import { mockProfile, mockLoans, mockPayments } from "@/lib/mock-data"
+
+export const metadata: Metadata = {
+  title: "Loan Payments",
+  description: "Manage your loan payments and view transaction history.",
+}
 
 export default function PaymentsPage() {
   const activeLoan = mockLoans.find((l) => l.status === "active")

@@ -2,6 +2,12 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CheckCircle2 } from "lucide-react"
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Features",
+  description: "Explore FinFlow's powerful features for accessible microfinance.",
+}
 
 export default function FeaturesPage() {
   return (

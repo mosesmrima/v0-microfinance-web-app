@@ -1,8 +1,12 @@
-"use client"
-
+import type { Metadata } from "next"
 import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { KYCReviewTable } from "@/components/admin/kyc-review-table"
 import { mockKYCDocuments } from "@/lib/mock-data"
+
+export const metadata: Metadata = {
+  title: "KYC Review",
+  description: "Review and verify user documents.",
+}
 
 export default function AdminKYCPage() {
   return (

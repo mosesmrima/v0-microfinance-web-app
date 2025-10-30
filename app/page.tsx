@@ -2,6 +2,12 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowRight, TrendingUp, Shield, Zap } from "lucide-react"
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Home",
+  description: "Accessible lending for everyone. Fast, transparent, and secure microfinance solutions.",
+}
 
 export default function HomePage() {
   return (

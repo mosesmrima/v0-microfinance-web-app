@@ -1,10 +1,14 @@
-"use client"
-
+import type { Metadata } from "next"
 import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { KYCStatus } from "@/components/kyc/kyc-status"
 import { KYCDocumentUpload } from "@/components/kyc/kyc-document-upload"
 import { KYCDocumentList } from "@/components/kyc/kyc-document-list"
 import { mockProfile, mockKYCDocuments } from "@/lib/mock-data"
+
+export const metadata: Metadata = {
+  title: "KYC Verification",
+  description: "Complete your identity verification to unlock higher loan limits.",
+}
 
 export default function KYCPage() {
   return (

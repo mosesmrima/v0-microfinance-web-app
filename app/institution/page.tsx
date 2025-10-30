@@ -1,10 +1,14 @@
-"use client"
-
+import type { Metadata } from "next"
 import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { InstitutionStats } from "@/components/institution/institution-stats"
 import { LoanManagementTable } from "@/components/institution/loan-management-table"
 import { LoanProductsManager } from "@/components/institution/loan-products-manager"
 import { mockLoans, mockLoanProducts } from "@/lib/mock-data"
+
+export const metadata: Metadata = {
+  title: "Institution Dashboard",
+  description: "Manage your loan products and applications.",
+}
 
 export default function InstitutionPage() {
   return (
