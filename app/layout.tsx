@@ -5,9 +5,12 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 
 export const metadata: Metadata = {
-  title: "v0 App",
-  description: "Created with v0",
-  generator: "v0.app",
+  title: {
+    default: "FinFlow - Microfinance Platform",
+    template: "%s | FinFlow",
+  },
+  description: "Fast, transparent, and secure microfinance solutions. Get approved in minutes with blockchain-powered lending.",
+  keywords: ["microfinance", "loans", "lending", "blockchain", "fintech"],
 }
 
 export default function RootLayout({
