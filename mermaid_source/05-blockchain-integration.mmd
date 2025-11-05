@@ -1,0 +1,48 @@
+sequenceDiagram
+    participant User
+    participant App
+    participant API
+    participant DB
+    participant SC as Smart Contract
+    participant BC as Blockchain
+
+    Note over User,BC: Profile Creation
+    User->>App: Submit Application
+    App->>API: Create Loan Request
+    API->>SC: createCustomerProfile
+    SC->>BC: Add Block
+    BC-->>SC: Block Created
+    SC-->>API: Profile Created
+    API->>DB: Store Reference
+
+    Note over User,BC: KYC Verification
+    User->>App: Upload Documents
+    App->>API: Submit KYC
+    API->>SC: initiateKYCVerification
+    SC->>SC: Execute Checks
+    SC-->>API: KYC Status
+    API->>DB: Update Status
+
+    Note over User,BC: Loan Processing
+    API->>SC: checkCreditScore
+    SC->>SC: Fraud Detection
+
+    alt High Risk
+        SC-->>API: Manual Review
+    else Low Risk
+        SC->>SC: Check Threshold
+        alt High Amount
+            SC-->>API: Executive Approval
+        else Low Amount
+            SC-->>API: Auto-Approve
+        end
+    end
+
+    Note over User,BC: Disbursement
+    API->>SC: disburseFunds
+    SC->>BC: Create Payment Block
+    BC-->>SC: Payment Confirmed
+    SC-->>API: Complete
+    API->>DB: Record Payment
+    API-->>App: Success
+    App-->>User: Funds Disbursed

@@ -1,0 +1,33 @@
+flowchart TD
+    START([Customer Applies for Loan]) --> BLOCKCHAIN[Create Profile on Blockchain]
+    BLOCKCHAIN --> NOTE[Profile added as new block with unique hash]
+
+    NOTE --> SMART{Smart Contract Triggered}
+    SMART --> KYC[KYC Verification]
+
+    KYC --> KYC_CHECK{KYC Status?}
+    KYC_CHECK -->|Verified| CREDIT[Credit Score Check]
+    KYC_CHECK -->|Rejected| KYC_END([Request Documents])
+
+    CREDIT --> FRAUD[Fraud Detection]
+    FRAUD --> RISK{Risk Level?}
+
+    RISK -->|High| MANUAL[Manual Review]
+    RISK -->|Low/Medium| THRESHOLD{Amount Check}
+
+    MANUAL --> ADMIN{Admin Decision}
+    ADMIN -->|Approve| THRESHOLD
+    ADMIN -->|Reject| REJECT
+
+    THRESHOLD -->|Above $10K| EXEC[Executive Approval]
+    THRESHOLD -->|Below $10K| APPROVE[Auto-Approve]
+
+    EXEC --> EXEC_DEC{Executive Decision}
+    EXEC_DEC -->|Approve| APPROVE
+    EXEC_DEC -->|Reject| REJECT
+
+    APPROVE --> DISBURSE[Disburse Funds]
+    DISBURSE --> RECORD[Record on Blockchain]
+    RECORD --> SUCCESS([Loan Disbursed])
+
+    REJECT --> NOTIFY([Notify Customer])

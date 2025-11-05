@@ -1,0 +1,16 @@
+flowchart TD
+    LOGIN[User Login] --> AUTH{Get Role}
+
+    AUTH -->|Borrower| B[Borrower Dashboard]
+    AUTH -->|Institution| I[Institution Dashboard]
+    AUTH -->|Admin| A[Admin Dashboard]
+
+    B --> B1[Apply for Loans]
+    B --> B2[Make Payments]
+    B --> B3[Upload KYC]
+
+    I --> I1[Manage Products]
+    I --> I2[Review Applications]
+
+    A --> A1[Review KYC]
+    A --> A2[Monitor Fraud]

@@ -1,0 +1,83 @@
+graph TB
+    subgraph "Client Layer"
+        WEB[Web Application<br/>Next.js 15 + React]
+        MOBILE[Mobile Application<br/>React Native]
+    end
+
+    subgraph "Application Layer"
+        API[API Gateway<br/>Next.js API Routes]
+        AUTH[Authentication<br/>Supabase Auth + Web3]
+    end
+
+    subgraph "Business Logic Layer"
+        LOAN[Loan Processing<br/>Service]
+        KYC_SVC[KYC Service]
+        FRAUD_SVC[Fraud Detection<br/>Service]
+        CREDIT_SVC[Credit Scoring<br/>Service]
+        PAYMENT_SVC[Payment<br/>Processing]
+    end
+
+    subgraph "Data Layer"
+        DB[(Supabase<br/>PostgreSQL)]
+        STORAGE[Supabase<br/>Storage]
+        KYC_DB[(KYC Module<br/>External DB)]
+    end
+
+    subgraph "Blockchain Layer"
+        NETWORK[Blockchain Network<br/>Polygon]
+        SC_KYC[KYC Smart<br/>Contract]
+        SC_LOAN[Loan Smart<br/>Contract]
+        SC_FRAUD[Fraud Detection<br/>Smart Contract]
+        SC_PAYMENT[Payment Smart<br/>Contract]
+    end
+
+    subgraph "External Services"
+        CREDIT_ENGINE[Credit Scoring<br/>Engine]
+        PAY_GATEWAY[Payment<br/>Gateway]
+        NOTIF[Notification<br/>Service]
+    end
+
+    WEB --> API
+    MOBILE --> API
+    API --> AUTH
+    AUTH --> LOAN
+    AUTH --> KYC_SVC
+    AUTH --> FRAUD_SVC
+    AUTH --> PAYMENT_SVC
+
+    LOAN --> DB
+    LOAN --> SC_LOAN
+    LOAN --> CREDIT_SVC
+
+    KYC_SVC --> DB
+    KYC_SVC --> SC_KYC
+    KYC_SVC --> KYC_DB
+    KYC_SVC --> STORAGE
+
+    FRAUD_SVC --> DB
+    FRAUD_SVC --> SC_FRAUD
+
+    PAYMENT_SVC --> DB
+    PAYMENT_SVC --> SC_PAYMENT
+    PAYMENT_SVC --> PAY_GATEWAY
+
+    CREDIT_SVC --> CREDIT_ENGINE
+    CREDIT_SVC --> DB
+
+    SC_KYC --> NETWORK
+    SC_LOAN --> NETWORK
+    SC_FRAUD --> NETWORK
+    SC_PAYMENT --> NETWORK
+
+    LOAN --> NOTIF
+    KYC_SVC --> NOTIF
+    PAYMENT_SVC --> NOTIF
+
+    style NETWORK fill:#e3f2fd
+    style SC_KYC fill:#e3f2fd
+    style SC_LOAN fill:#e3f2fd
+    style SC_FRAUD fill:#e3f2fd
+    style SC_PAYMENT fill:#e3f2fd
+    style CREDIT_ENGINE fill:#fff3e0
+    style PAY_GATEWAY fill:#fff3e0
+    style KYC_DB fill:#f3e5f5

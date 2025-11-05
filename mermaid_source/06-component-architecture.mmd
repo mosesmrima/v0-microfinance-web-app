@@ -1,0 +1,18 @@
+graph TB
+    USER[User] --> FRONTEND[Next.js Frontend]
+    FRONTEND --> API[API Routes]
+    API --> DB[(Supabase DB)]
+    API --> BLOCKCHAIN[Blockchain Network]
+    API --> EXTERNAL[External Services]
+
+    FRONTEND -.-> PAGES[Pages]
+    FRONTEND -.-> COMPONENTS[Components]
+
+    API -.-> LOANS[Loans API]
+    API -.-> KYC[KYC API]
+    API -.-> PAYMENTS[Payments API]
+
+    BLOCKCHAIN -.-> CONTRACTS[Smart Contracts]
+
+    EXTERNAL -.-> CREDIT[Credit Scoring]
+    EXTERNAL -.-> GATEWAY[Payment Gateway]

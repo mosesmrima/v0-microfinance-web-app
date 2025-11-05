@@ -1,0 +1,32 @@
+erDiagram
+    PROFILES ||--o{ LOANS : has
+    LOANS ||--o{ PAYMENTS : receives
+    PAYMENTS ||--o{ BLOCKCHAIN_TX : records
+
+    PROFILES {
+        uuid id
+        text email
+        text role
+        text kyc_status
+    }
+
+    LOANS {
+        uuid id
+        uuid user_id
+        decimal amount
+        text status
+    }
+
+    PAYMENTS {
+        uuid id
+        uuid loan_id
+        decimal amount
+        text method
+    }
+
+    BLOCKCHAIN_TX {
+        uuid id
+        uuid payment_id
+        text tx_hash
+        text network
+    }
