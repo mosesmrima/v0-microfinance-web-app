@@ -165,100 +165,40 @@ Core database structure with Row-Level Security (RLS):
 
 ```mermaid
 erDiagram
-    PROFILES ||--o{ LOANS : "applies for"
-    PROFILES ||--o{ KYC_DOCUMENTS : "uploads"
-    PROFILES ||--o{ LOAN_PRODUCTS : "creates"
-    LOANS ||--o{ LOAN_REPAYMENTS : "has"
-    LOANS ||--o{ FRAUD_DETECTION : "flagged for"
-    LOANS ||--o{ PAYMENTS : "receives"
-    PAYMENTS ||--o{ BLOCKCHAIN_TRANSACTIONS : "recorded as"
+    PROFILES ||--o{ LOANS : has
+    LOANS ||--o{ PAYMENTS : receives
+    PAYMENTS ||--o{ BLOCKCHAIN_TX : records
 
     PROFILES {
-        uuid id PK
+        uuid id
         text email
-        text first_name
-        text last_name
         text role
         text kyc_status
-        timestamp created_at
     }
 
     LOANS {
-        uuid id PK
-        uuid user_id FK
-        uuid institution_id FK
+        uuid id
+        uuid user_id
         decimal amount
-        decimal interest_rate
-        int duration_months
         text status
-        decimal monthly_payment
-        timestamp created_at
-    }
-
-    LOAN_PRODUCTS {
-        uuid id PK
-        uuid institution_id FK
-        text name
-        text description
-        decimal min_amount
-        decimal max_amount
-        decimal interest_rate
-        int duration_months
-        timestamp created_at
-    }
-
-    KYC_DOCUMENTS {
-        uuid id PK
-        uuid user_id FK
-        text document_type
-        text document_url
-        text status
-        text rejection_reason
-        timestamp uploaded_at
-    }
-
-    FRAUD_DETECTION {
-        uuid id PK
-        uuid loan_id FK
-        uuid user_id FK
-        decimal risk_score
-        text risk_level
-        text flags
-        timestamp flagged_at
-        text action
-    }
-
-    LOAN_REPAYMENTS {
-        uuid id PK
-        uuid loan_id FK
-        decimal amount
-        date due_date
-        date paid_date
-        text status
-        timestamp created_at
     }
 
     PAYMENTS {
-        uuid id PK
-        uuid user_id FK
-        uuid loan_id FK
+        uuid id
+        uuid loan_id
         decimal amount
-        text payment_method
-        text status
-        timestamp created_at
+        text method
     }
 
-    BLOCKCHAIN_TRANSACTIONS {
-        uuid id PK
-        uuid user_id FK
-        uuid payment_id FK
-        text transaction_hash
-        decimal amount
-        text status
-        text blockchain_network
-        timestamp created_at
+    BLOCKCHAIN_TX {
+        uuid id
+        uuid payment_id
+        text tx_hash
+        text network
     }
 ```
+
+**Complete Schema**: 8 tables total including loan_products, kyc_documents, fraud_detection, and loan_repayments. See database migration scripts in `/scripts/` for full schema.
 
 ---
 
@@ -267,34 +207,22 @@ erDiagram
 Role-based access control and dashboard features:
 
 ```mermaid
-flowchart LR
-    LOGIN[User Login] --> AUTH{Authenticate & Get Role}
+flowchart TD
+    LOGIN[User Login] --> AUTH{Get Role}
 
-    AUTH -->|Borrower| B_DASH[Borrower Dashboard]
-    AUTH -->|Institution| I_DASH[Institution Dashboard]
-    AUTH -->|Admin| A_DASH[Admin Dashboard]
+    AUTH -->|Borrower| B[Borrower Dashboard]
+    AUTH -->|Institution| I[Institution Dashboard]
+    AUTH -->|Admin| A[Admin Dashboard]
 
-    B_DASH --> B1[View Profile & KYC]
-    B_DASH --> B2[Browse Loans]
-    B_DASH --> B3[Apply for Loans]
-    B_DASH --> B4[Make Payments]
+    B --> B1[Apply for Loans]
+    B --> B2[Make Payments]
+    B --> B3[Upload KYC]
 
-    B1 --> B1A[Pending: $5K limit]
-    B1 --> B1B[Verified: $50K limit]
-    B4 --> B4A[Card/Bank/Crypto]
+    I --> I1[Manage Products]
+    I --> I2[Review Applications]
 
-    I_DASH --> I1[View Statistics]
-    I_DASH --> I2[Manage Products]
-    I_DASH --> I3[Review Applications]
-    I_DASH --> I4[Approve/Reject]
-
-    A_DASH --> A1[KYC Review]
-    A_DASH --> A2[Fraud Detection]
-    A_DASH --> A3[User Management]
-    A_DASH --> A4[Audit Logs]
-
-    A1 --> A1A{Verify or Reject}
-    A2 --> A2A{Take Action}
+    A --> A1[Review KYC]
+    A --> A2[Monitor Fraud]
 ```
 
 ---
@@ -362,58 +290,23 @@ Frontend and backend component structure:
 
 ```mermaid
 graph TB
-    FRONTEND[Next.js Frontend]
-    PAGES[App Pages]
-    COMPONENTS[React Components]
-    BACKEND[Backend Services]
-    API[API Routes]
-    DB[(Supabase Database)]
-    STORAGE[File Storage]
-    BLOCKCHAIN[Blockchain Network]
-    SMART_CONTRACTS[Smart Contracts]
-    EXTERNAL[External Services]
+    USER[User] --> FRONTEND[Next.js Frontend]
+    FRONTEND --> API[API Routes]
+    API --> DB[(Supabase DB)]
+    API --> BLOCKCHAIN[Blockchain Network]
+    API --> EXTERNAL[External Services]
 
-    FRONTEND --> PAGES
-    FRONTEND --> COMPONENTS
+    FRONTEND -.-> PAGES[Pages]
+    FRONTEND -.-> COMPONENTS[Components]
 
-    PAGES --> DASHBOARD[Dashboard Pages]
-    PAGES --> AUTH[Auth Pages]
-    PAGES --> ADMIN[Admin Pages]
+    API -.-> LOANS[Loans API]
+    API -.-> KYC[KYC API]
+    API -.-> PAYMENTS[Payments API]
 
-    COMPONENTS --> DASH_COMP[Dashboard Components]
-    COMPONENTS --> KYC_COMP[KYC Components]
-    COMPONENTS --> PAY_COMP[Payment Components]
-    COMPONENTS --> UI[UI Components]
+    BLOCKCHAIN -.-> CONTRACTS[Smart Contracts]
 
-    BACKEND --> API
-    BACKEND --> DB
-    BACKEND --> STORAGE
-
-    API --> API_LOANS[Loans API]
-    API --> API_KYC[KYC API]
-    API --> API_PAYMENTS[Payments API]
-    API --> API_FRAUD[Fraud API]
-
-    DB --> PROFILES[User Profiles]
-    DB --> LOANS[Loans]
-    DB --> DOCUMENTS[KYC Documents]
-
-    API_LOANS --> DB
-    API_KYC --> DB
-    API_KYC --> STORAGE
-    API_PAYMENTS --> DB
-    API_FRAUD --> DB
-
-    API_LOANS --> SMART_CONTRACTS
-    API_KYC --> SMART_CONTRACTS
-    API_PAYMENTS --> SMART_CONTRACTS
-
-    SMART_CONTRACTS --> BLOCKCHAIN
-
-    API --> EXTERNAL
-    EXTERNAL --> CREDIT[Credit Scoring]
-    EXTERNAL --> GATEWAY[Payment Gateway]
-    EXTERNAL --> NOTIFY[Notifications]
+    EXTERNAL -.-> CREDIT[Credit Scoring]
+    EXTERNAL -.-> GATEWAY[Payment Gateway]
 ```
 
 ---
