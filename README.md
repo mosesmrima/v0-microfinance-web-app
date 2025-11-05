@@ -123,66 +123,38 @@ Complete workflow from customer query to fund disbursement:
 
 ```mermaid
 flowchart TD
-    START([Customer Queries<br/>Loan Information]) --> BROWSE[Browse Loan Products<br/>on Web/Mobile App]
-    BROWSE --> APPLY[Submit Loan<br/>Application]
+    START([Customer Applies for Loan]) --> BLOCKCHAIN[Create Profile on Blockchain]
+    BLOCKCHAIN --> NOTE[Profile added as new block with unique hash]
 
-    APPLY --> BLOCKCHAIN[Create Customer Profile<br/>on Blockchain]
-    BLOCKCHAIN --> BLOCK_NOTE[New customer profile added as a block<br/>with unique hash linked to previous block]
+    NOTE --> SMART{Smart Contract Triggered}
+    SMART --> KYC[KYC Verification]
 
-    BLOCK_NOTE --> SMART_CONTRACT{Smart Contract<br/>Triggered}
+    KYC --> KYC_CHECK{KYC Status?}
+    KYC_CHECK -->|Verified| CREDIT[Credit Score Check]
+    KYC_CHECK -->|Rejected| KYC_END([Request Documents])
 
-    SMART_CONTRACT --> KYC_CHECK[Verification of Customer<br/>Identity & KYC Checks]
-    KYC_CHECK --> KYC_MODULE[(KYC Module<br/>External Database)]
+    CREDIT --> FRAUD[Fraud Detection]
+    FRAUD --> RISK{Risk Level?}
 
-    KYC_MODULE --> KYC_RESULT{KYC Status?}
-    KYC_RESULT -->|Verified| CREDIT_CHECK[Check Customer<br/>Credit Score]
-    KYC_RESULT -->|Pending/Rejected| KYC_REJECT[Request Additional<br/>Documents]
+    RISK -->|High| MANUAL[Manual Review]
+    RISK -->|Low/Medium| THRESHOLD{Amount Check}
 
-    KYC_REJECT --> NOTIFY_KYC[Notify Customer]
-    NOTIFY_KYC --> END1([End: Pending KYC])
+    MANUAL --> ADMIN{Admin Decision}
+    ADMIN -->|Approve| THRESHOLD
+    ADMIN -->|Reject| REJECT
 
-    CREDIT_CHECK --> CREDIT_ENGINE[Credit Scoring<br/>Engine]
-    CREDIT_ENGINE --> FRAUD_CHECK[Fraud Detection<br/>Analysis]
+    THRESHOLD -->|Above $10K| EXEC[Executive Approval]
+    THRESHOLD -->|Below $10K| APPROVE[Auto-Approve]
 
-    FRAUD_CHECK --> RISK_SCORE{Risk Assessment}
-    RISK_SCORE -->|High Risk| FRAUD_REVIEW[Manual Fraud<br/>Review Required]
-    RISK_SCORE -->|Low/Medium Risk| THRESHOLD_CHECK
+    EXEC --> EXEC_DEC{Executive Decision}
+    EXEC_DEC -->|Approve| APPROVE
+    EXEC_DEC -->|Reject| REJECT
 
-    FRAUD_REVIEW --> ADMIN_FRAUD[Admin Reviews<br/>Fraud Alert]
-    ADMIN_FRAUD --> FRAUD_DECISION{Admin Decision}
-    FRAUD_DECISION -->|Approve| THRESHOLD_CHECK
-    FRAUD_DECISION -->|Reject| REJECT
+    APPROVE --> DISBURSE[Disburse Funds]
+    DISBURSE --> RECORD[Record on Blockchain]
+    RECORD --> SUCCESS([Loan Disbursed])
 
-    THRESHOLD_CHECK{Loan Amount Above<br/>Approval Threshold?}
-
-    THRESHOLD_CHECK -->|Yes - Above $10,000| EXECUTIVE[Forward for Higher<br/>Approval by Executive]
-    THRESHOLD_CHECK -->|No - Below $10,000| AUTO_APPROVE[Auto-Approve<br/>Loan]
-
-    EXECUTIVE --> EXEC_REVIEW[Executive Reviews<br/>Application]
-    EXEC_REVIEW --> EXEC_DECISION{Executive<br/>Decision?}
-
-    EXEC_DECISION -->|Approve| APPROVE[Loan Approved]
-    EXEC_DECISION -->|Reject| REJECT[Loan Rejected]
-
-    AUTO_APPROVE --> APPROVE
-
-    APPROVE --> DISBURSE[Disburse Funds via<br/>Designated Payment Gateway]
-    DISBURSE --> BLOCKCHAIN_RECORD[Record Transaction<br/>on Blockchain]
-    BLOCKCHAIN_RECORD --> NOTIFY_APPROVE[Notify Customer<br/>& Create Repayment Schedule]
-    NOTIFY_APPROVE --> END2([End: Loan Disbursed])
-
-    REJECT --> NOTIFY_REJECT[Notify Customer<br/>with Rejection Reason]
-    NOTIFY_REJECT --> END3([End: Loan Rejected])
-
-    style BLOCKCHAIN fill:#e3f2fd
-    style SMART_CONTRACT fill:#e3f2fd
-    style BLOCKCHAIN_RECORD fill:#e3f2fd
-    style BLOCK_NOTE fill:#e1f5fe
-    style CREDIT_ENGINE fill:#fff3e0
-    style KYC_MODULE fill:#f3e5f5
-    style APPROVE fill:#c8e6c9
-    style REJECT fill:#ffcdd2
-    style DISBURSE fill:#c8e6c9
+    REJECT --> NOTIFY([Notify Customer])
 ```
 
 ---
@@ -195,7 +167,7 @@ Core database structure with Row-Level Security (RLS):
 erDiagram
     PROFILES ||--o{ LOANS : "applies for"
     PROFILES ||--o{ KYC_DOCUMENTS : "uploads"
-    PROFILES ||--o{ LOAN_PRODUCTS : "creates (institutions)"
+    PROFILES ||--o{ LOAN_PRODUCTS : "creates"
     LOANS ||--o{ LOAN_REPAYMENTS : "has"
     LOANS ||--o{ FRAUD_DETECTION : "flagged for"
     LOANS ||--o{ PAYMENTS : "receives"
@@ -206,11 +178,9 @@ erDiagram
         text email
         text first_name
         text last_name
-        text phone
-        text role "borrower|institution|admin"
-        text kyc_status "pending|verified|rejected"
+        text role
+        text kyc_status
         timestamp created_at
-        timestamp updated_at
     }
 
     LOANS {
@@ -220,11 +190,9 @@ erDiagram
         decimal amount
         decimal interest_rate
         int duration_months
-        text status "pending|approved|rejected|active|completed|defaulted"
-        text purpose
+        text status
         decimal monthly_payment
         timestamp created_at
-        timestamp updated_at
     }
 
     LOAN_PRODUCTS {
@@ -236,19 +204,17 @@ erDiagram
         decimal max_amount
         decimal interest_rate
         int duration_months
-        text requirements
         timestamp created_at
     }
 
     KYC_DOCUMENTS {
         uuid id PK
         uuid user_id FK
-        text document_type "id|proof_of_address|income_proof"
+        text document_type
         text document_url
-        text status "pending|verified|rejected"
+        text status
         text rejection_reason
         timestamp uploaded_at
-        timestamp verified_at
     }
 
     FRAUD_DETECTION {
@@ -256,12 +222,10 @@ erDiagram
         uuid loan_id FK
         uuid user_id FK
         decimal risk_score
-        text risk_level "low|medium|high"
-        text[] flags
+        text risk_level
+        text flags
         timestamp flagged_at
-        timestamp reviewed_at
-        uuid reviewed_by FK
-        text action "approved|rejected|manual_review"
+        text action
     }
 
     LOAN_REPAYMENTS {
@@ -270,7 +234,7 @@ erDiagram
         decimal amount
         date due_date
         date paid_date
-        text status "pending|paid|overdue"
+        text status
         timestamp created_at
     }
 
@@ -279,10 +243,9 @@ erDiagram
         uuid user_id FK
         uuid loan_id FK
         decimal amount
-        text payment_method "card|bank_transfer|crypto"
-        text status "pending|completed|failed"
+        text payment_method
+        text status
         timestamp created_at
-        timestamp updated_at
     }
 
     BLOCKCHAIN_TRANSACTIONS {
@@ -291,10 +254,9 @@ erDiagram
         uuid payment_id FK
         text transaction_hash
         decimal amount
-        text status "pending|confirmed|failed"
-        text blockchain_network "ethereum|polygon|off-chain"
+        text status
+        text blockchain_network
         timestamp created_at
-        timestamp updated_at
     }
 ```
 
@@ -343,117 +305,53 @@ Customer profile creation and transaction recording on blockchain:
 
 ```mermaid
 sequenceDiagram
-    participant User as Customer
-    participant WebApp as Web/Mobile App
-    participant API as API Gateway
-    participant Auth as Authentication
-    participant DB as Supabase DB
-    participant Wallet as Web3 Wallet
-    participant BC as Blockchain Network
+    participant User
+    participant App
+    participant API
+    participant DB
     participant SC as Smart Contract
-    participant Block as New Block
+    participant BC as Blockchain
 
-    Note over User,Block: 1. Customer Profile Creation
+    Note over User,BC: Profile Creation
+    User->>App: Submit Application
+    App->>API: Create Loan Request
+    API->>SC: createCustomerProfile
+    SC->>BC: Add Block
+    BC-->>SC: Block Created
+    SC-->>API: Profile Created
+    API->>DB: Store Reference
 
-    User->>WebApp: Submit Loan Application
-    WebApp->>API: POST /api/loans/apply
-    API->>Auth: Verify User Session
-    Auth-->>API: User Authenticated
+    Note over User,BC: KYC Verification
+    User->>App: Upload Documents
+    App->>API: Submit KYC
+    API->>SC: initiateKYCVerification
+    SC->>SC: Execute Checks
+    SC-->>API: KYC Status
+    API->>DB: Update Status
 
-    API->>DB: Check Existing Profile
+    Note over User,BC: Loan Processing
+    API->>SC: checkCreditScore
+    SC->>SC: Fraud Detection
 
-    alt Profile Doesn't Exist on Blockchain
-        API->>Wallet: Request Wallet Connection
-        Wallet->>User: Prompt for Signature
-        User->>Wallet: Approve & Sign
-        Wallet-->>API: Wallet Address + Signature
-
-        API->>SC: createCustomerProfile(address, hash)
-        SC->>BC: Validate Transaction
-        BC->>Block: Create New Block
-
-        Note over Block: New customer profile added as a block<br/>comprised of unique hash carrying<br/>the hash of the previous block
-
-        Block-->>BC: Block Added to Chain
-        BC-->>SC: Transaction Confirmed
-        SC-->>API: Profile Created (tx_hash)
-        API->>DB: Store Profile with Blockchain Reference
+    alt High Risk
+        SC-->>API: Manual Review
+    else Low Risk
+        SC->>SC: Check Threshold
+        alt High Amount
+            SC-->>API: Executive Approval
+        else Low Amount
+            SC-->>API: Auto-Approve
+        end
     end
 
-    Note over User,Block: 2. KYC Verification on Blockchain
-
-    User->>WebApp: Upload KYC Documents
-    WebApp->>API: POST /api/kyc/upload
-    API->>DB: Store Document URLs
-    API->>SC: initiateKYCVerification(userHash)
-
-    SC->>SC: Execute KYC Checks
-    Note over SC: Verification of customer identity<br/>and KYC checks executed
-
-    SC-->>API: KYC Status (pending/verified)
-    API->>DB: Update KYC Status
-    API-->>WebApp: KYC Submitted
-    WebApp-->>User: Verification in Progress
-
-    Note over User,Block: 3. Credit Score & Fraud Check
-
-    API->>SC: checkCreditScore(userHash)
-    SC->>SC: Retrieve Credit Score from Engine
-    SC->>SC: Run Fraud Detection Analysis
-
-    alt High Risk Detected
-        SC-->>API: Risk Score: High
-        API->>DB: Create Fraud Alert
-        API-->>WebApp: Manual Review Required
-    else Low/Medium Risk
-        SC-->>API: Risk Score: Low/Medium
-        API->>SC: Proceed with Approval Logic
-    end
-
-    Note over User,Block: 4. Loan Approval & Smart Contract
-
-    SC->>SC: Check Loan Amount Threshold
-
-    alt Amount > Threshold
-        SC-->>API: Requires Executive Approval
-        API->>DB: Update Status: pending_approval
-        API-->>WebApp: Forwarded for Higher Approval
-    else Amount <= Threshold
-        SC->>SC: Auto-Approve Loan
-        SC-->>API: Loan Approved
-        API->>DB: Update Status: approved
-        API-->>WebApp: Loan Approved
-    end
-
-    Note over User,Block: 5. Fund Disbursement via Payment Gateway
-
-    API->>SC: disburseFunds(loanId, amount, gateway)
-    SC->>BC: Create Payment Transaction
-    BC->>Block: Add Payment Block
-    Block-->>BC: Transaction Recorded
-    BC-->>SC: Payment Confirmed (tx_hash)
-
-    SC-->>API: Disbursement Complete
-    API->>DB: Record Payment with tx_hash
-    API-->>WebApp: Funds Disbursed
-    WebApp-->>User: Loan Approved & Funds Sent
-
-    Note over User,Block: 6. Repayment Recording
-
-    User->>WebApp: Make Loan Payment
-    WebApp->>API: POST /api/payments
-    API->>Wallet: Initiate Payment Transaction
-    Wallet->>User: Confirm Payment
-    User->>Wallet: Approve
-    Wallet->>BC: Submit Payment Transaction
-    BC->>Block: Add Repayment Block
-    Block-->>BC: Transaction Confirmed
-    BC-->>API: Payment Confirmed (tx_hash)
-    API->>DB: Update Repayment Status
-    API->>SC: recordRepayment(loanId, amount, tx_hash)
-    SC-->>API: Repayment Recorded
-    API-->>WebApp: Payment Successful
-    WebApp-->>User: Payment Confirmed on Blockchain
+    Note over User,BC: Disbursement
+    API->>SC: disburseFunds
+    SC->>BC: Create Payment Block
+    BC-->>SC: Payment Confirmed
+    SC-->>API: Complete
+    API->>DB: Record Payment
+    API-->>App: Success
+    App-->>User: Funds Disbursed
 ```
 
 ---
