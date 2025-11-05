@@ -23,6 +23,8 @@ FinFlow is a next-generation microfinance platform that combines traditional len
 
 ## Architecture
 
+> **Note**: All diagrams below are rendered using Mermaid. If you're viewing this on GitHub, they should display automatically. To generate PNG versions of these diagrams, you can use tools like [mermaid.ink](https://mermaid.ink/) or [Kroki.io](https://kroki.io/).
+
 ### 1. System Architecture
 
 The platform is built on a modern microservices architecture with blockchain integration:
@@ -303,90 +305,34 @@ erDiagram
 Role-based access control and dashboard features:
 
 ```mermaid
-flowchart TD
-    LOGIN[User Login] --> AUTH{Authenticate<br/>& Get Role}
+flowchart LR
+    LOGIN[User Login] --> AUTH{Authenticate & Get Role}
 
-    AUTH -->|role: borrower| BORROWER_DASH[Borrower Dashboard]
-    AUTH -->|role: institution| INSTITUTION_DASH[Institution Dashboard]
-    AUTH -->|role: admin| ADMIN_DASH[Admin Dashboard]
+    AUTH -->|Borrower| B_DASH[Borrower Dashboard]
+    AUTH -->|Institution| I_DASH[Institution Dashboard]
+    AUTH -->|Admin| A_DASH[Admin Dashboard]
 
-    subgraph "Borrower Features"
-        BORROWER_DASH --> B1[View Profile & KYC Status]
-        BORROWER_DASH --> B2[Browse Loan Products]
-        BORROWER_DASH --> B3[Apply for Loans]
-        BORROWER_DASH --> B4[View Active/Completed Loans]
-        BORROWER_DASH --> B5[Upload KYC Documents]
-        BORROWER_DASH --> B6[Make Payments]
-        BORROWER_DASH --> B7[View Payment History]
+    B_DASH --> B1[View Profile & KYC]
+    B_DASH --> B2[Browse Loans]
+    B_DASH --> B3[Apply for Loans]
+    B_DASH --> B4[Make Payments]
 
-        B1 --> B1A[KYC Status: Pending<br/>Loan Limit: $5,000<br/>Rate: 15-20%]
-        B1 --> B1B[KYC Status: Verified<br/>Loan Limit: $50,000<br/>Rate: 8-12%]
+    B1 --> B1A[Pending: $5K limit]
+    B1 --> B1B[Verified: $50K limit]
+    B4 --> B4A[Card/Bank/Crypto]
 
-        B3 --> B3A[Fill Application Form]
-        B3A --> B3B[Calculate Monthly Payment]
-        B3B --> B3C[Submit Application]
+    I_DASH --> I1[View Statistics]
+    I_DASH --> I2[Manage Products]
+    I_DASH --> I3[Review Applications]
+    I_DASH --> I4[Approve/Reject]
 
-        B6 --> B6A{Select Payment Method}
-        B6A -->|Card| B6B[Card Payment]
-        B6A -->|Bank Transfer| B6C[Bank Transfer]
-        B6A -->|Crypto| B6D[Blockchain Payment]
-    end
+    A_DASH --> A1[KYC Review]
+    A_DASH --> A2[Fraud Detection]
+    A_DASH --> A3[User Management]
+    A_DASH --> A4[Audit Logs]
 
-    subgraph "Institution Features"
-        INSTITUTION_DASH --> I1[View Institution Statistics]
-        INSTITUTION_DASH --> I2[Manage Loan Products]
-        INSTITUTION_DASH --> I3[Review Loan Applications]
-        INSTITUTION_DASH --> I4[Approve/Reject Applications]
-        INSTITUTION_DASH --> I5[Monitor Portfolio]
-        INSTITUTION_DASH --> I6[View Borrower Details]
-
-        I1 --> I1A[Total Loans Issued<br/>Total Amount Disbursed<br/>Active Loans<br/>Pending Applications]
-
-        I2 --> I2A[Create New Product]
-        I2 --> I2B[Set Interest Rates]
-        I2 --> I2C[Define Requirements]
-
-        I3 --> I3A[View Application Details]
-        I3A --> I3B[Check Credit Score]
-        I3B --> I3C[Review KYC Status]
-        I3C --> I4
-    end
-
-    subgraph "Admin Features"
-        ADMIN_DASH --> A1[KYC Review Dashboard]
-        ADMIN_DASH --> A2[Fraud Detection Dashboard]
-        ADMIN_DASH --> A3[User Management]
-        ADMIN_DASH --> A4[Audit Logs]
-
-        A1 --> A1A[View Pending KYC Documents]
-        A1A --> A1B[Review Documents]
-        A1B --> A1C{Verify or Reject}
-        A1C -->|Verify| A1D[Update KYC Status to Verified]
-        A1C -->|Reject| A1E[Provide Rejection Reason]
-
-        A2 --> A2A[View Fraud Alerts]
-        A2A --> A2B[High/Medium/Low Risk Counts]
-        A2B --> A2C[Review Flagged Applications]
-        A2C --> A2D{Take Action}
-        A2D -->|Approve| A2E[Override & Approve Loan]
-        A2D -->|Reject| A2F[Reject Loan]
-        A2D -->|Review| A2G[Request Manual Review]
-
-        A3 --> A3A[View All Users]
-        A3 --> A3B[View All Loans]
-        A3 --> A3C[Manage Permissions]
-
-        A4 --> A4A[View System Activity]
-        A4A --> A4B[Track Changes]
-        A4B --> A4C[Compliance Reporting]
-    end
-
-    style BORROWER_DASH fill:#e8f5e9
-    style INSTITUTION_DASH fill:#e3f2fd
-    style ADMIN_DASH fill:#fce4ec
-    style B6D fill:#e3f2fd
-    style A1D fill:#c8e6c9
-    style A1E fill:#ffcdd2
+    A1 --> A1A{Verify or Reject}
+    A2 --> A2A{Take Action}
 ```
 
 ---
@@ -508,11 +454,6 @@ sequenceDiagram
     SC-->>API: Repayment Recorded
     API-->>WebApp: Payment Successful
     WebApp-->>User: Payment Confirmed on Blockchain
-
-    style BC fill:#e3f2fd
-    style SC fill:#e3f2fd
-    style Block fill:#e1f5fe
-    style Wallet fill:#fff3e0
 ```
 
 ---
@@ -523,207 +464,58 @@ Frontend and backend component structure:
 
 ```mermaid
 graph TB
-    subgraph "Frontend - Next.js App Router"
-        subgraph "Pages /app"
-            HOME[Homepage /]
-            DASH[Dashboard /dashboard]
-            KYC_PAGE[KYC /dashboard/kyc]
-            PAYMENTS_PAGE[Payments /dashboard/payments]
-            APPLY[Apply /dashboard/apply]
-            INST[Institution /institution]
-            ADMIN_KYC[Admin KYC /admin/kyc]
-            ADMIN_FRAUD[Admin Fraud /admin/fraud]
-            AUTH_LOGIN[Login /auth/login]
-            AUTH_SIGNUP[Sign Up /auth/sign-up]
-        end
+    FRONTEND[Next.js Frontend]
+    PAGES[App Pages]
+    COMPONENTS[React Components]
+    BACKEND[Backend Services]
+    API[API Routes]
+    DB[(Supabase Database)]
+    STORAGE[File Storage]
+    BLOCKCHAIN[Blockchain Network]
+    SMART_CONTRACTS[Smart Contracts]
+    EXTERNAL[External Services]
 
-        subgraph "Components /components"
-            LAYOUT[Dashboard Layout]
+    FRONTEND --> PAGES
+    FRONTEND --> COMPONENTS
 
-            subgraph "Dashboard Components"
-                LOAN_OVERVIEW[Loans Overview]
-                LOAN_PRODUCTS[Loan Products]
-                USER_PROFILE[User Profile]
-                LOAN_APP_FORM[Loan Application Form]
-            end
+    PAGES --> DASHBOARD[Dashboard Pages]
+    PAGES --> AUTH[Auth Pages]
+    PAGES --> ADMIN[Admin Pages]
 
-            subgraph "KYC Components"
-                KYC_STATUS[KYC Status Display]
-                KYC_UPLOAD[Document Upload]
-                KYC_LIST[Document List]
-            end
+    COMPONENTS --> DASH_COMP[Dashboard Components]
+    COMPONENTS --> KYC_COMP[KYC Components]
+    COMPONENTS --> PAY_COMP[Payment Components]
+    COMPONENTS --> UI[UI Components]
 
-            subgraph "Payment Components"
-                PAY_OVERVIEW[Payment Overview]
-                PAY_HISTORY[Payment History]
-                PAY_FORM[Make Payment Form]
-            end
+    BACKEND --> API
+    BACKEND --> DB
+    BACKEND --> STORAGE
 
-            subgraph "Institution Components"
-                INST_HEADER[Institution Header]
-                INST_STATS[Institution Stats]
-                LOAN_MGMT[Loan Management Table]
-                PRODUCT_MGR[Product Manager]
-            end
+    API --> API_LOANS[Loans API]
+    API --> API_KYC[KYC API]
+    API --> API_PAYMENTS[Payments API]
+    API --> API_FRAUD[Fraud API]
 
-            subgraph "Admin Components"
-                ADMIN_HEADER[Admin Header]
-                KYC_REVIEW[KYC Review Table]
-                FRAUD_STATS[Fraud Detection Stats]
-                FRAUD_ALERTS[Fraud Alerts List]
-            end
+    DB --> PROFILES[User Profiles]
+    DB --> LOANS[Loans]
+    DB --> DOCUMENTS[KYC Documents]
 
-            subgraph "UI Components /ui"
-                BUTTON[Button]
-                CARD[Card]
-                DIALOG[Dialog]
-                INPUT[Input]
-                SELECT[Select]
-                TABLE[Table]
-                BADGE[Badge]
-                PROGRESS[Progress]
-            end
-        end
-
-        subgraph "Utilities /lib"
-            TYPES[TypeScript Types]
-            UTILS[Utility Functions]
-            MOCK[Mock Data]
-        end
-    end
-
-    subgraph "Backend Services"
-        subgraph "API Routes"
-            API_AUTH[/api/auth]
-            API_LOANS[/api/loans]
-            API_KYC[/api/kyc]
-            API_PAYMENTS[/api/payments]
-            API_FRAUD[/api/fraud]
-        end
-
-        subgraph "Database - Supabase"
-            DB_PROFILES[(profiles)]
-            DB_LOANS[(loans)]
-            DB_PRODUCTS[(loan_products)]
-            DB_KYC[(kyc_documents)]
-            DB_FRAUD[(fraud_detection)]
-            DB_PAYMENTS[(payments)]
-            DB_BLOCKCHAIN[(blockchain_transactions)]
-            DB_AUDIT[(audit_logs)]
-        end
-
-        subgraph "Storage"
-            STORAGE[Supabase Storage<br/>Document Files]
-        end
-    end
-
-    subgraph "External Integrations"
-        WEB3[Web3 Provider<br/>Wallet Connection]
-        BLOCKCHAIN_NET[Blockchain Network<br/>Polygon]
-        SMART_CONTRACTS[Smart Contracts<br/>KYC, Loan, Fraud, Payment]
-        CREDIT_API[Credit Scoring API]
-        PAY_GATEWAY_EXT[Payment Gateway<br/>Stripe/PayPal]
-        NOTIFICATION[Notification Service<br/>Email/SMS]
-    end
-
-    HOME --> LAYOUT
-    DASH --> LAYOUT
-    DASH --> LOAN_OVERVIEW
-    DASH --> LOAN_PRODUCTS
-    DASH --> USER_PROFILE
-
-    KYC_PAGE --> LAYOUT
-    KYC_PAGE --> KYC_STATUS
-    KYC_PAGE --> KYC_UPLOAD
-    KYC_PAGE --> KYC_LIST
-
-    PAYMENTS_PAGE --> LAYOUT
-    PAYMENTS_PAGE --> PAY_OVERVIEW
-    PAYMENTS_PAGE --> PAY_HISTORY
-    PAYMENTS_PAGE --> PAY_FORM
-
-    APPLY --> LAYOUT
-    APPLY --> LOAN_APP_FORM
-
-    INST --> LAYOUT
-    INST --> INST_HEADER
-    INST --> INST_STATS
-    INST --> LOAN_MGMT
-    INST --> PRODUCT_MGR
-
-    ADMIN_KYC --> LAYOUT
-    ADMIN_KYC --> ADMIN_HEADER
-    ADMIN_KYC --> KYC_REVIEW
-
-    ADMIN_FRAUD --> LAYOUT
-    ADMIN_FRAUD --> ADMIN_HEADER
-    ADMIN_FRAUD --> FRAUD_STATS
-    ADMIN_FRAUD --> FRAUD_ALERTS
-
-    LOAN_OVERVIEW -.-> TYPES
-    LOAN_PRODUCTS -.-> TYPES
-    USER_PROFILE -.-> TYPES
-    KYC_UPLOAD -.-> TYPES
-    PAY_FORM -.-> TYPES
-
-    LOAN_OVERVIEW --> BUTTON
-    LOAN_OVERVIEW --> CARD
-    LOAN_PRODUCTS --> CARD
-    LOAN_PRODUCTS --> BUTTON
-    USER_PROFILE --> CARD
-    USER_PROFILE --> BADGE
-    USER_PROFILE --> PROGRESS
-
-    KYC_UPLOAD --> INPUT
-    KYC_UPLOAD --> BUTTON
-    KYC_LIST --> TABLE
-    KYC_LIST --> BADGE
-
-    PAY_FORM --> INPUT
-    PAY_FORM --> SELECT
-    PAY_FORM --> BUTTON
-    PAY_HISTORY --> TABLE
-
-    KYC_REVIEW --> TABLE
-    KYC_REVIEW --> DIALOG
-    KYC_REVIEW --> BUTTON
-
-    FRAUD_ALERTS --> TABLE
-    FRAUD_ALERTS --> BADGE
-    FRAUD_STATS --> CARD
-
-    API_AUTH --> DB_PROFILES
-    API_LOANS --> DB_LOANS
-    API_LOANS --> DB_PRODUCTS
-    API_LOANS --> CREDIT_API
-    API_LOANS --> SMART_CONTRACTS
-
-    API_KYC --> DB_KYC
+    API_LOANS --> DB
+    API_KYC --> DB
     API_KYC --> STORAGE
+    API_PAYMENTS --> DB
+    API_FRAUD --> DB
+
+    API_LOANS --> SMART_CONTRACTS
     API_KYC --> SMART_CONTRACTS
-
-    API_PAYMENTS --> DB_PAYMENTS
-    API_PAYMENTS --> DB_BLOCKCHAIN
     API_PAYMENTS --> SMART_CONTRACTS
-    API_PAYMENTS --> PAY_GATEWAY_EXT
 
-    API_FRAUD --> DB_FRAUD
-    API_FRAUD --> SMART_CONTRACTS
+    SMART_CONTRACTS --> BLOCKCHAIN
 
-    SMART_CONTRACTS --> BLOCKCHAIN_NET
-
-    PAY_FORM --> WEB3
-    WEB3 --> BLOCKCHAIN_NET
-
-    API_LOANS --> NOTIFICATION
-    API_KYC --> NOTIFICATION
-    API_PAYMENTS --> NOTIFICATION
-
-    style BLOCKCHAIN_NET fill:#e3f2fd
-    style SMART_CONTRACTS fill:#e3f2fd
-    style WEB3 fill:#fff3e0
-    style CREDIT_API fill:#fff3e0
-    style PAY_GATEWAY_EXT fill:#fff3e0
+    API --> EXTERNAL
+    EXTERNAL --> CREDIT[Credit Scoring]
+    EXTERNAL --> GATEWAY[Payment Gateway]
+    EXTERNAL --> NOTIFY[Notifications]
 ```
 
 ---
