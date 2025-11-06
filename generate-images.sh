@@ -101,8 +101,8 @@ DIAGRAM1
 )
 
 ENCODED1=$(echo -n "$MERMAID1" | base64 -w 0 | sed 's/+/-/g; s/\//_/g; s/=//g')
-curl -s -o docs/images/01-system-architecture.png "https://mermaid.ink/img/$ENCODED1"
-echo "✓ Saved: docs/images/01-system-architecture.png"
+curl -s -o docs/images/01-system-architecture.png "https://mermaid.ink/img/$ENCODED1?type=png&width=2400&bgColor=white"
+echo "✓ Saved: docs/images/01-system-architecture.png (High Quality, 2400px width)"
 
 # Diagram 2: Loan Flow
 echo "2/6 Generating Loan Application Flow..."
@@ -144,8 +144,8 @@ DIAGRAM2
 )
 
 ENCODED2=$(echo -n "$MERMAID2" | base64 -w 0 | sed 's/+/-/g; s/\//_/g; s/=//g')
-curl -s -o docs/images/02-loan-flow.png "https://mermaid.ink/img/$ENCODED2"
-echo "✓ Saved: docs/images/02-loan-flow.png"
+curl -s -o docs/images/02-loan-flow.png "https://mermaid.ink/img/$ENCODED2?type=png&width=2400&bgColor=white"
+echo "✓ Saved: docs/images/02-loan-flow.png (High Quality, 2400px width)"
 
 # Diagram 3: Database Schema
 echo "3/6 Generating Database Schema..."
@@ -186,8 +186,8 @@ DIAGRAM3
 )
 
 ENCODED3=$(echo -n "$MERMAID3" | base64 -w 0 | sed 's/+/-/g; s/\//_/g; s/=//g')
-curl -s -o docs/images/03-database-schema.png "https://mermaid.ink/img/$ENCODED3"
-echo "✓ Saved: docs/images/03-database-schema.png"
+curl -s -o docs/images/03-database-schema.png "https://mermaid.ink/img/$ENCODED3?type=png&width=2400&bgColor=white"
+echo "✓ Saved: docs/images/03-database-schema.png (High Quality, 2400px width)"
 
 # Diagram 4: Multi-Role Dashboard
 echo "4/6 Generating Multi-Role Dashboard..."
@@ -212,8 +212,8 @@ DIAGRAM4
 )
 
 ENCODED4=$(echo -n "$MERMAID4" | base64 -w 0 | sed 's/+/-/g; s/\//_/g; s/=//g')
-curl -s -o docs/images/04-multi-role-dashboard.png "https://mermaid.ink/img/$ENCODED4"
-echo "✓ Saved: docs/images/04-multi-role-dashboard.png"
+curl -s -o docs/images/04-multi-role-dashboard.png "https://mermaid.ink/img/$ENCODED4?type=png&width=2400&bgColor=white"
+echo "✓ Saved: docs/images/04-multi-role-dashboard.png (High Quality, 2400px width)"
 
 # Diagram 5: Blockchain Integration
 echo "5/6 Generating Blockchain Integration Flow..."
@@ -270,8 +270,8 @@ DIAGRAM5
 )
 
 ENCODED5=$(echo -n "$MERMAID5" | base64 -w 0 | sed 's/+/-/g; s/\//_/g; s/=//g')
-curl -s -o docs/images/05-blockchain-integration.png "https://mermaid.ink/img/$ENCODED5"
-echo "✓ Saved: docs/images/05-blockchain-integration.png"
+curl -s -o docs/images/05-blockchain-integration.png "https://mermaid.ink/img/$ENCODED5?type=png&width=2400&bgColor=white"
+echo "✓ Saved: docs/images/05-blockchain-integration.png (High Quality, 2400px width)"
 
 # Diagram 6: Component Architecture
 echo "6/6 Generating Component Architecture..."
@@ -298,13 +298,19 @@ DIAGRAM6
 )
 
 ENCODED6=$(echo -n "$MERMAID6" | base64 -w 0 | sed 's/+/-/g; s/\//_/g; s/=//g')
-curl -s -o docs/images/06-component-architecture.png "https://mermaid.ink/img/$ENCODED6"
-echo "✓ Saved: docs/images/06-component-architecture.png"
+curl -s -o docs/images/06-component-architecture.png "https://mermaid.ink/img/$ENCODED6?type=png&width=2400&bgColor=white"
+echo "✓ Saved: docs/images/06-component-architecture.png (High Quality, 2400px width)"
 
 echo ""
 echo "============================================"
-echo "✓ All 6 diagram images generated successfully!"
+echo "✓ All 6 HIGH QUALITY diagram images generated!"
 echo "============================================"
+echo ""
+echo "Quality Settings:"
+echo "  - Width: 2400px (Large, high-resolution images)"
+echo "  - Type: PNG (high quality)"
+echo "  - Background: White (clean and professional)"
+echo "  - Result: 3-4x larger text and much better visibility"
 echo ""
 echo "Images saved to: docs/images/"
 ls -lh docs/images/*.png
