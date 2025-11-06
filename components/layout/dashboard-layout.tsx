@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
   LayoutDashboard,
@@ -14,38 +14,93 @@ import {
   Menu,
   X,
   LogOut,
+  FileText,
+  Calendar,
+  DollarSign,
+  CheckCircle,
+  BarChart3,
+  Users,
+  Activity,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useAuth } from "@/contexts/AuthContext"
+import { UserRole } from "@/lib/types"
 
 interface DashboardLayoutProps {
   children: React.ReactNode
 }
 
-const navigationItems = [
-  {
-    title: "User Dashboard",
-    items: [
-      { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
-      { href: "/dashboard/kyc", label: "KYC Verification", icon: UserCheck },
-      { href: "/dashboard/payments", label: "Payments", icon: CreditCard },
-    ],
-  },
-  {
-    title: "Institution",
-    items: [{ href: "/institution", label: "Institution Dashboard", icon: Building2 }],
-  },
-  {
-    title: "Admin",
-    items: [
-      { href: "/admin/kyc", label: "KYC Review", icon: FileCheck },
-      { href: "/admin/fraud", label: "Fraud Detection", icon: AlertTriangle },
-    ],
-  },
-]
+interface NavItem {
+  href: string
+  label: string
+  icon: any
+}
+
+interface NavSection {
+  title: string
+  items: NavItem[]
+}
+
+// Navigation configuration for each role
+const navigationByRole: Record<UserRole, NavSection[]> = {
+  borrower: [
+    {
+      title: "Dashboard",
+      items: [
+        { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
+        { href: "/dashboard/applications", label: "My Applications", icon: FileText },
+        { href: "/dashboard/kyc", label: "KYC Verification", icon: UserCheck },
+        { href: "/dashboard/payments", label: "Payments", icon: CreditCard },
+      ],
+    },
+  ],
+  loan_officer: [
+    {
+      title: "Loan Officer",
+      items: [
+        { href: "/loan-officer", label: "Dashboard", icon: LayoutDashboard },
+        { href: "/loan-officer/applications", label: "Loan Applications", icon: FileText },
+        { href: "/loan-officer/kyc-review", label: "KYC Review", icon: UserCheck },
+        { href: "/loan-officer/fraud-alerts", label: "Fraud Alerts", icon: AlertTriangle },
+        { href: "/loan-officer/payment-schedules", label: "Payment Schedules", icon: Calendar },
+      ],
+    },
+  ],
+  loan_manager: [
+    {
+      title: "Loan Manager",
+      items: [
+        { href: "/loan-manager", label: "Dashboard", icon: LayoutDashboard },
+        { href: "/loan-manager/high-value-loans", label: "High-Value Loans", icon: DollarSign },
+        { href: "/loan-manager/approvals", label: "Approval History", icon: CheckCircle },
+      ],
+    },
+  ],
+  admin: [
+    {
+      title: "Admin",
+      items: [
+        { href: "/admin", label: "Analytics", icon: BarChart3 },
+        { href: "/admin/users", label: "Users", icon: Users },
+        { href: "/admin/system", label: "System Health", icon: Activity },
+      ],
+    },
+  ],
+}
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const pathname = usePathname()
+  const router = useRouter()
+  const { currentUser, logout } = useAuth()
+
+  // Get navigation items for current user's role
+  const navigationItems = currentUser ? navigationByRole[currentUser.role] : []
+
+  const handleLogout = () => {
+    logout()
+    router.push("/auth/login")
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -81,6 +136,18 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               <div className="h-8 w-8 rounded-lg bg-primary" />
               <span className="text-xl font-bold text-foreground">FinFlow</span>
             </div>
+
+            {/* User Info */}
+            {currentUser && (
+              <div className="border-b border-border px-4 py-3">
+                <div className="text-sm font-medium text-foreground">
+                  {currentUser.first_name} {currentUser.last_name}
+                </div>
+                <div className="text-xs text-muted-foreground capitalize">
+                  {currentUser.role.replace("_", " ")}
+                </div>
+              </div>
+            )}
 
             {/* Navigation */}
             <nav className="flex-1 overflow-y-auto p-4">
@@ -120,12 +187,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
             {/* Footer */}
             <div className="border-t border-border p-4">
-              <Link href="/auth/login">
-                <Button variant="outline" className="w-full gap-2">
-                  <LogOut className="h-4 w-4" />
-                  Logout
-                </Button>
-              </Link>
+              <Button variant="outline" className="w-full gap-2" onClick={handleLogout}>
+                <LogOut className="h-4 w-4" />
+                Logout
+              </Button>
             </div>
           </div>
         </aside>
@@ -139,9 +204,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         )}
 
         {/* Main Content */}
-        <main className="flex-1 overflow-x-hidden">
-          {children}
-        </main>
+        <main className="flex-1 overflow-x-hidden">{children}</main>
       </div>
     </div>
   )

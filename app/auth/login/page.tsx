@@ -5,16 +5,20 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Separator } from "@/components/ui/separator"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { useAuth } from "@/contexts/AuthContext"
+import { UserRole } from "@/lib/types"
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("john@example.com")
-  const [password, setPassword] = useState("password123")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+  const { login } = useAuth()
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -22,16 +26,47 @@ export default function LoginPage() {
     setError(null)
 
     try {
-      // Simulate login delay
-      await new Promise((resolve) => setTimeout(resolve, 500))
-      // For demo purposes, redirect to dashboard
-      router.push("/dashboard")
+      const result = await login(email, password)
+
+      if (result.success) {
+        // Redirect based on role (will be implemented with route protection)
+        router.push("/dashboard")
+      } else {
+        setError(result.error || "Login failed")
+      }
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred")
     } finally {
       setIsLoading(false)
     }
   }
+
+  // Quick login for testing
+  const handleQuickLogin = async (testEmail: string, testPassword: string) => {
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const result = await login(testEmail, testPassword)
+
+      if (result.success) {
+        router.push("/dashboard")
+      } else {
+        setError(result.error || "Login failed")
+      }
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : "An error occurred")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const quickLoginOptions = [
+    { role: "Borrower", email: "borrower@test.com", password: "borrower123", variant: "default" as const },
+    { role: "Loan Officer", email: "officer@test.com", password: "officer123", variant: "secondary" as const },
+    { role: "Loan Manager", email: "manager@test.com", password: "manager123", variant: "secondary" as const },
+    { role: "Admin", email: "admin@test.com", password: "admin123", variant: "secondary" as const },
+  ]
 
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
@@ -71,13 +106,42 @@ export default function LoginPage() {
                     {isLoading ? "Logging in..." : "Login"}
                   </Button>
                 </div>
-                <div className="mt-4 text-center text-sm">
-                  Don&apos;t have an account?{" "}
-                  <Link href="/auth/sign-up" className="underline underline-offset-4">
-                    Sign up
-                  </Link>
-                </div>
               </form>
+
+              {/* Quick Login Section for Testing */}
+              <div className="mt-6">
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <Separator />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-background px-2 text-muted-foreground">Quick Login (Testing)</span>
+                  </div>
+                </div>
+
+                <div className="mt-4 grid gap-2">
+                  {quickLoginOptions.map((option) => (
+                    <Button
+                      key={option.role}
+                      type="button"
+                      variant={option.variant}
+                      size="sm"
+                      onClick={() => handleQuickLogin(option.email, option.password)}
+                      disabled={isLoading}
+                      className="w-full"
+                    >
+                      Login as {option.role}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-6 text-center text-sm">
+                Don&apos;t have an account?{" "}
+                <Link href="/auth/sign-up" className="underline underline-offset-4">
+                  Sign up
+                </Link>
+              </div>
             </CardContent>
           </Card>
         </div>

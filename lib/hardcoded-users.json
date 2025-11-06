@@ -1,0 +1,88 @@
+{
+  "users": [
+    {
+      "id": "borrower-1",
+      "email": "borrower@test.com",
+      "password": "borrower123",
+      "first_name": "John",
+      "last_name": "Doe",
+      "phone": "+1234567890",
+      "role": "borrower",
+      "kyc_status": "verified",
+      "kyc_stage1_completed": true,
+      "kyc_stage1_status": "verified",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    },
+    {
+      "id": "borrower-2",
+      "email": "newuser@test.com",
+      "password": "newuser123",
+      "first_name": "Jane",
+      "last_name": "Smith",
+      "phone": "+1234567899",
+      "role": "borrower",
+      "kyc_status": "pending",
+      "kyc_stage1_completed": false,
+      "kyc_stage1_status": "pending",
+      "created_at": "2024-02-01T10:00:00Z",
+      "updated_at": "2024-02-01T10:00:00Z"
+    },
+    {
+      "id": "borrower-3",
+      "email": "rejected@test.com",
+      "password": "rejected123",
+      "first_name": "Robert",
+      "last_name": "Wilson",
+      "phone": "+1234567898",
+      "role": "borrower",
+      "kyc_status": "rejected",
+      "kyc_stage1_completed": true,
+      "kyc_stage1_status": "rejected",
+      "created_at": "2024-01-20T10:00:00Z",
+      "updated_at": "2024-01-25T10:00:00Z"
+    },
+    {
+      "id": "officer-1",
+      "email": "officer@test.com",
+      "password": "officer123",
+      "first_name": "Sarah",
+      "last_name": "Johnson",
+      "phone": "+1234567891",
+      "role": "loan_officer",
+      "kyc_status": "verified",
+      "kyc_stage1_completed": true,
+      "kyc_stage1_status": "verified",
+      "created_at": "2024-01-10T10:00:00Z",
+      "updated_at": "2024-01-10T10:00:00Z"
+    },
+    {
+      "id": "manager-1",
+      "email": "manager@test.com",
+      "password": "manager123",
+      "first_name": "Michael",
+      "last_name": "Smith",
+      "phone": "+1234567892",
+      "role": "loan_manager",
+      "kyc_status": "verified",
+      "kyc_stage1_completed": true,
+      "kyc_stage1_status": "verified",
+      "created_at": "2024-01-10T10:00:00Z",
+      "updated_at": "2024-01-10T10:00:00Z"
+    },
+    {
+      "id": "admin-1",
+      "email": "admin@test.com",
+      "password": "admin123",
+      "first_name": "Emily",
+      "last_name": "Brown",
+      "phone": "+1234567893",
+      "role": "admin",
+      "kyc_status": "verified",
+      "kyc_stage1_completed": true,
+      "kyc_stage1_status": "verified",
+      "created_at": "2024-01-05T10:00:00Z",
+      "updated_at": "2024-01-05T10:00:00Z"
+    }
+  ]
+}
