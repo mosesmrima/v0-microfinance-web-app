@@ -241,6 +241,11 @@ export function getKYCDocumentsByStatus(status: "pending" | "verified" | "reject
   return documents.filter((d) => d.status === status)
 }
 
+export function getKYCDocumentsByLoanId(loanId: string): KYCDocument[] {
+  const documents = getKYCDocuments()
+  return documents.filter((d) => d.loan_application_id === loanId)
+}
+
 export function getPendingKYCDocuments(): KYCDocument[] {
   return getKYCDocumentsByStatus("pending")
 }

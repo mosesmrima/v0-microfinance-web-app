@@ -102,7 +102,8 @@ export interface LoanProduct {
   min_amount: number
   max_amount: number
   interest_rate: number
-  duration_months: number
+  min_duration: number
+  max_duration: number
   requirements?: string
   created_at: string
 }
