@@ -143,18 +143,18 @@ export default function PaymentSchedulesPage() {
               <p className="text-sm text-muted-foreground">Amount Due</p>
               <p className="font-medium flex items-center gap-1">
                 <DollarSign className="h-4 w-4" />
-                ${schedule.amount_due.toFixed(2)}
+                ${schedule.amount_due?.toFixed(2) || "0.00"}
               </p>
             </div>
 
             <div>
               <p className="text-sm text-muted-foreground">Principal</p>
-              <p className="font-medium">${schedule.principal_amount.toFixed(2)}</p>
+              <p className="font-medium">${schedule.principal_amount?.toFixed(2) || "0.00"}</p>
             </div>
 
             <div>
               <p className="text-sm text-muted-foreground">Interest</p>
-              <p className="font-medium">${schedule.interest_amount.toFixed(2)}</p>
+              <p className="font-medium">${schedule.interest_amount?.toFixed(2) || "0.00"}</p>
             </div>
           </div>
 
@@ -167,7 +167,7 @@ export default function PaymentSchedulesPage() {
                     Paid on {format(new Date(schedule.paid_date), "MMM dd, yyyy")}
                   </p>
                   {schedule.amount_paid && (
-                    <p className="text-xs">Amount: ${schedule.amount_paid.toFixed(2)}</p>
+                    <p className="text-xs">Amount: ${schedule.amount_paid?.toFixed(2) || "0.00"}</p>
                   )}
                 </div>
               </div>

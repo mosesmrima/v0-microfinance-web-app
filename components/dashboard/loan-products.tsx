@@ -55,7 +55,7 @@ export function LoanProducts({ products }: LoanProductsProps) {
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground">Duration</p>
-                    <p className="text-sm font-semibold text-foreground">{product.duration_months} months</p>
+                    <p className="text-sm font-semibold text-foreground">{product.min_duration}-{product.max_duration} months</p>
                   </div>
                 </div>
 
@@ -67,7 +67,7 @@ export function LoanProducts({ products }: LoanProductsProps) {
                 )}
               </div>
 
-              <Link href={`/dashboard/apply/${product.id}`} className="mt-auto">
+              <Link href="/dashboard/apply" className="mt-auto">
                 <Button className="w-full gap-2">
                   Apply Now <ArrowRight className="h-4 w-4" />
                 </Button>
