@@ -49,8 +49,6 @@ const navigationByRole: Record<UserRole, NavSection[]> = {
       items: [
         { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
         { href: "/dashboard/applications", label: "My Applications", icon: FileText },
-        { href: "/dashboard/kyc", label: "KYC Verification", icon: UserCheck },
-        { href: "/dashboard/payments", label: "Payments", icon: CreditCard },
       ],
     },
   ],
