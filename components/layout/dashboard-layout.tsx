@@ -53,25 +53,25 @@ const navigationByRole: Record<UserRole, NavSection[]> = {
       ],
     },
   ],
-  loan_officer: [
+  md: [
     {
-      title: "Loan Officer",
+      title: "Managing Director",
       items: [
-        { href: "/loan-officer", label: "Dashboard", icon: LayoutDashboard },
-        { href: "/loan-officer/applications", label: "Loan Applications", icon: FileText },
-        { href: "/loan-officer/kyc-review", label: "KYC Review", icon: UserCheck },
-        { href: "/loan-officer/fraud-alerts", label: "Fraud Alerts", icon: AlertTriangle },
-        { href: "/loan-officer/payment-schedules", label: "Payment Schedules", icon: Calendar },
+        { href: "/md", label: "Dashboard", icon: LayoutDashboard },
+        { href: "/md/applications", label: "Loan Applications", icon: FileText },
+        { href: "/md/kyc-review", label: "KYC Review", icon: UserCheck },
+        { href: "/md/payment-schedules", label: "Payment Schedules", icon: Calendar },
       ],
     },
   ],
-  loan_manager: [
+  finance_director: [
     {
-      title: "Loan Manager",
+      title: "Finance Director",
       items: [
-        { href: "/loan-manager", label: "Dashboard", icon: LayoutDashboard },
-        { href: "/loan-manager/high-value-loans", label: "High-Value Loans", icon: DollarSign },
-        { href: "/loan-manager/approvals", label: "Approval History", icon: CheckCircle },
+        { href: "/finance-director", label: "Dashboard", icon: LayoutDashboard },
+        { href: "/finance-director/applications", label: "High-Value Loans", icon: DollarSign },
+        { href: "/finance-director/kyc-review", label: "KYC Review", icon: UserCheck },
+        { href: "/finance-director/payment-schedules", label: "Payment Schedules", icon: Calendar },
       ],
     },
   ],
@@ -81,6 +81,8 @@ const navigationByRole: Record<UserRole, NavSection[]> = {
       items: [
         { href: "/admin", label: "Analytics", icon: BarChart3 },
         { href: "/admin/users", label: "Users", icon: Users },
+        { href: "/admin/fraud", label: "Fraud Detection", icon: AlertTriangle },
+        { href: "/admin/kyc", label: "KYC Review", icon: UserCheck },
         { href: "/admin/system", label: "System Health", icon: Activity },
       ],
     },

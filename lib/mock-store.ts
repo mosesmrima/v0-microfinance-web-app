@@ -163,17 +163,21 @@ export function getLoansByStatus(status: Loan["status"]): Loan[] {
   return loans.filter((l) => l.status === status)
 }
 
-export function getPendingLoansForOfficer(): Loan[] {
+export function getPendingLoansForMD(): Loan[] {
   const loans = getLoans()
-  // Loans < $10K that are pending_loan_officer
-  return loans.filter((l) => l.amount < 10000 && l.status === "pending_loan_officer")
+  // Loans < $10K that are pending_md
+  return loans.filter((l) => l.amount < 10000 && l.status === "pending_md")
 }
 
-export function getPendingLoansForManager(): Loan[] {
+export function getPendingLoansForFinanceDirector(): Loan[] {
   const loans = getLoans()
-  // Loans >= $10K that are pending_loan_manager
-  return loans.filter((l) => l.amount >= 10000 && l.status === "pending_loan_manager")
+  // Loans >= $10K that are pending_finance_director
+  return loans.filter((l) => l.amount >= 10000 && l.status === "pending_finance_director")
 }
+
+// Legacy function names for backward compatibility
+export const getPendingLoansForOfficer = getPendingLoansForMD
+export const getPendingLoansForManager = getPendingLoansForFinanceDirector
 
 export function createLoan(loanData: Omit<Loan, "id" | "created_at" | "updated_at">): Loan {
   const loans = getLoans()

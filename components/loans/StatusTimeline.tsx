@@ -39,14 +39,14 @@ export function StatusTimeline({ currentStatus, rejectionReason, className }: St
       description: "Documents being verified",
     },
     {
-      status: "pending_loan_officer",
-      label: "Officer Review",
-      description: "Loan officer reviewing application",
+      status: "pending_md",
+      label: "MD Review",
+      description: "Managing Director reviewing application",
     },
     {
-      status: "pending_loan_manager",
-      label: "Manager Review",
-      description: "Loan manager reviewing high-value loan",
+      status: "pending_finance_director",
+      label: "Finance Director Review",
+      description: "Finance Director reviewing high-value loan",
     },
     {
       status: "approved",
@@ -54,8 +54,8 @@ export function StatusTimeline({ currentStatus, rejectionReason, className }: St
       description: "Loan application approved",
     },
     {
-      status: "active",
-      label: "Active",
+      status: "disbursed",
+      label: "Disbursed",
       description: "Loan disbursed and active",
     },
   ]
@@ -72,13 +72,13 @@ export function StatusTimeline({ currentStatus, rejectionReason, className }: St
       )
     }
 
-    // For loans under review by manager, include manager step
-    if (currentStatus === "pending_loan_manager") {
+    // For loans under review by finance director, include finance director step
+    if (currentStatus === "pending_finance_director") {
       return allSteps
     }
 
-    // For other loans, exclude manager review step
-    return allSteps.filter((step) => step.status !== "pending_loan_manager")
+    // For other loans, exclude finance director review step
+    return allSteps.filter((step) => step.status !== "pending_finance_director")
   }
 
   const visibleSteps = getVisibleSteps()
@@ -98,10 +98,10 @@ export function StatusTimeline({ currentStatus, rejectionReason, className }: St
       "kyc_stage2_required",
       "submitted",
       "under_review",
-      "pending_loan_officer",
-      "pending_loan_manager",
+      "pending_md",
+      "pending_finance_director",
       "approved",
-      "active",
+      "disbursed",
     ]
 
     const stepIndex = statusOrder.indexOf(step.status)
