@@ -29,8 +29,12 @@ export default function DashboardPage() {
       router.push("/loan-officer")
       return
     }
-    if (currentUser.role === "loan_manager") {
-      router.push("/loan-manager")
+    if (currentUser.role === "md") {
+      router.push("/md")
+      return
+    }
+    if (currentUser.role === "finance_director") {
+      router.push("/finance-director")
       return
     }
     if (currentUser.role === "admin") {

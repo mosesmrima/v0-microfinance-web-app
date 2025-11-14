@@ -129,20 +129,20 @@ export const mockLoanProducts: LoanProduct[] = [
 // ============================================
 
 export const mockLoans: Loan[] = [
-  // Active loan for borrower-1 (< $10K - handled by officer)
+  // Disbursed loan for borrower-1 (< $10K - handled by MD)
   {
     id: "loan-001",
     user_id: "borrower-1",
     amount: 5000,
     interest_rate: 8.5,
     duration_months: 12,
-    status: "active",
+    status: "disbursed",
     purpose: "Home renovation",
     monthly_payment: 438.5,
-    assigned_to: "officer-1",
-    reviewed_by: "officer-1",
-    approved_by: "officer-1",
-    officer_notes: "All documents verified. Good credit history.",
+    assigned_to: "md-1",
+    reviewed_by: "md-1",
+    approved_by: "md-1",
+    md_notes: "All documents verified. Good credit history.",
     created_at: "2024-06-01T10:00:00Z",
     updated_at: "2024-06-05T10:00:00Z",
     submitted_at: "2024-06-01T10:00:00Z",
@@ -158,41 +158,41 @@ export const mockLoans: Loan[] = [
     status: "completed",
     purpose: "Medical expenses",
     monthly_payment: 340,
-    assigned_to: "officer-1",
-    reviewed_by: "officer-1",
-    approved_by: "officer-1",
+    assigned_to: "md-1",
+    reviewed_by: "md-1",
+    approved_by: "md-1",
     created_at: "2024-01-01T10:00:00Z",
     updated_at: "2024-07-01T10:00:00Z",
     submitted_at: "2024-01-01T10:00:00Z",
     approved_at: "2024-01-05T10:00:00Z",
   },
-  // Pending loan for officer review (< $10K)
+  // Pending loan for MD review (< $10K)
   {
     id: "loan-003",
     user_id: "borrower-1",
     amount: 8000,
     interest_rate: 8.5,
     duration_months: 18,
-    status: "pending_loan_officer",
+    status: "pending_md",
     purpose: "Business equipment",
     monthly_payment: 482.5,
-    assigned_to: "officer-1",
+    assigned_to: "md-1",
     created_at: "2024-10-20T10:00:00Z",
     updated_at: "2024-10-20T10:00:00Z",
     submitted_at: "2024-10-20T10:00:00Z",
   },
-  // High-value loan for manager review (≥ $10K)
+  // High-value loan for Finance Director review (≥ $10K)
   {
     id: "loan-004",
     user_id: "borrower-1",
     amount: 15000,
     interest_rate: 7.5,
     duration_months: 24,
-    status: "pending_loan_manager",
+    status: "pending_finance_director",
     purpose: "Business expansion",
     monthly_payment: 702.5,
-    assigned_to: "manager-1",
-    officer_notes: "Pre-approved by loan officer. Excellent credit score.",
+    assigned_to: "finance-director-1",
+    md_notes: "Pre-approved by MD. Excellent credit score.",
     created_at: "2024-10-25T10:00:00Z",
     updated_at: "2024-10-26T10:00:00Z",
     submitted_at: "2024-10-25T10:00:00Z",
@@ -214,7 +214,7 @@ export const mockKYCDocuments: KYCDocument[] = [
     status: "verified",
     uploaded_at: "2024-01-10T10:00:00Z",
     verified_at: "2024-01-12T10:00:00Z",
-    verified_by: "officer-1",
+    verified_by: "md-1",
   },
   {
     id: "kyc-002",
@@ -225,7 +225,7 @@ export const mockKYCDocuments: KYCDocument[] = [
     status: "verified",
     uploaded_at: "2024-01-11T10:00:00Z",
     verified_at: "2024-01-13T10:00:00Z",
-    verified_by: "officer-1",
+    verified_by: "md-1",
   },
   // Stage 2 documents for borrower-1's first loan (verified)
   {
@@ -238,7 +238,7 @@ export const mockKYCDocuments: KYCDocument[] = [
     loan_application_id: "loan-001",
     uploaded_at: "2024-06-01T10:00:00Z",
     verified_at: "2024-06-02T10:00:00Z",
-    verified_by: "officer-1",
+    verified_by: "md-1",
   },
   {
     id: "kyc-004",
@@ -250,7 +250,7 @@ export const mockKYCDocuments: KYCDocument[] = [
     loan_application_id: "loan-001",
     uploaded_at: "2024-06-01T10:00:00Z",
     verified_at: "2024-06-02T10:00:00Z",
-    verified_by: "officer-1",
+    verified_by: "md-1",
   },
   // Stage 2 documents for borrower-1's pending loan (pending review)
   {
@@ -441,8 +441,9 @@ export const mockPaymentSchedules: PaymentSchedule[] = [
 export const mockSystemAnalytics: SystemAnalytics = {
   total_users: 1256,
   total_borrowers: 1200,
-  total_loan_officers: 45,
-  total_loan_managers: 10,
+  total_loan_officers: 35,
+  total_mds: 8,
+  total_finance_directors: 3,
   total_admins: 1,
   total_loans: 2840,
   total_disbursement_amount: 28500000,

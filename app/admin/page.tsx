@@ -49,7 +49,7 @@ export default function AdminDashboard() {
     .filter((p) => p.status === "completed")
     .reduce((sum, payment) => sum + payment.amount, 0)
   const pendingApplications = allLoans.filter(
-    (l) => l.status === "pending_loan_officer" || l.status === "pending_loan_manager"
+    (l) => l.status === "pending_md" || l.status === "pending_finance_director"
   ).length
 
   return (
@@ -208,12 +208,16 @@ export default function AdminDashboard() {
               {[
                 { role: "Borrowers", count: allUsers.filter((u) => u.role === "borrower").length },
                 {
-                  role: "Loan Officers",
+                  role: "Loan Officers (Tier 1)",
                   count: allUsers.filter((u) => u.role === "loan_officer").length,
                 },
                 {
-                  role: "Loan Managers",
-                  count: allUsers.filter((u) => u.role === "loan_manager").length,
+                  role: "Managing Directors (Tier 2)",
+                  count: allUsers.filter((u) => u.role === "md").length,
+                },
+                {
+                  role: "Finance Directors (Tier 3)",
+                  count: allUsers.filter((u) => u.role === "finance_director").length,
                 },
                 { role: "Admins", count: allUsers.filter((u) => u.role === "admin").length },
               ].map((item) => (

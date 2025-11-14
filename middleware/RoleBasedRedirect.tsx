@@ -39,7 +39,8 @@ function getRoleDashboard(role: UserRole): string {
   const dashboards: Record<UserRole, string> = {
     borrower: "/dashboard",
     loan_officer: "/loan-officer",
-    loan_manager: "/loan-manager",
+    md: "/md",
+    finance_director: "/finance-director",
     admin: "/admin",
   }
 

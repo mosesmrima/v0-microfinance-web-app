@@ -33,13 +33,13 @@ export default function LoanManagerDashboard() {
       return
     }
 
-    if (currentUser.role !== "loan_manager") {
+    if (currentUser.role !== "finance_director") {
       router.push("/dashboard")
       return
     }
   }, [isAuthenticated, currentUser, router])
 
-  if (!isAuthenticated || !currentUser || currentUser.role !== "loan_manager") {
+  if (!isAuthenticated || !currentUser || currentUser.role !== "finance_director") {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -64,7 +64,7 @@ export default function LoanManagerDashboard() {
 
   const getStatusBadge = (status: string) => {
     const config: Record<string, { variant: "default" | "secondary" | "destructive" }> = {
-      pending_loan_manager: { variant: "default" },
+      pending_finance_director: { variant: "default" },
       approved: { variant: "default" },
       rejected: { variant: "destructive" },
       active: { variant: "default" },

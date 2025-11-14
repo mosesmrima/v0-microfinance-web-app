@@ -2,7 +2,7 @@
 // USER & AUTHENTICATION TYPES
 // ============================================
 
-export type UserRole = "borrower" | "loan_officer" | "loan_manager" | "admin"
+export type UserRole = "borrower" | "loan_officer" | "md" | "finance_director" | "admin"
 export type KYCStatus = "pending" | "verified" | "rejected"
 export type RiskLevel = "low" | "medium" | "high"
 
@@ -38,11 +38,12 @@ export type LoanStatus =
   | "submitted"                // Application submitted
   | "under_review"             // Being reviewed
   | "fraud_check"              // Fraud detection in progress
-  | "pending_loan_officer"     // Waiting for loan officer (< $10K)
-  | "pending_loan_manager"     // Waiting for loan manager (≥ $10K)
+  | "pending_loan_officer"     // Tier 1 review by loan officer
+  | "pending_md"               // Tier 2 approval by MD (escalated or < $10K)
+  | "pending_finance_director" // Tier 3 approval by Finance Director (≥ $10K, new products)
   | "approved"                 // Approved, ready to disburse
   | "rejected"                 // Rejected
-  | "active"                   // Loan disbursed, payments ongoing
+  | "disbursed"                // Loan disbursed, payments ongoing
   | "completed"                // Fully paid
   | "defaulted"                // Payment default
 
@@ -80,12 +81,16 @@ export interface Loan {
   monthly_payment?: number
 
   // Approval tracking
-  assigned_to?: string  // loan_officer or loan_manager ID
+  assigned_to?: string  // Loan Officer, MD, or Finance Director ID
   reviewed_by?: string  // Who reviewed it
   approved_by?: string  // Who approved it
   rejection_reason?: string
-  officer_notes?: string
-  manager_notes?: string
+  loan_officer_notes?: string      // Tier 1 review notes
+  loan_officer_flags?: string[]    // Issues flagged by loan officer
+  escalated_by?: string            // Loan officer who escalated
+  escalation_reason?: string       // Why it was escalated
+  md_notes?: string                // Tier 2 approval notes
+  finance_director_notes?: string  // Tier 3 approval notes
 
   // Timestamps
   created_at: string
@@ -196,7 +201,8 @@ export interface SystemAnalytics {
   total_users: number
   total_borrowers: number
   total_loan_officers: number
-  total_loan_managers: number
+  total_mds: number
+  total_finance_directors: number
   total_admins: number
 
   // Loan statistics

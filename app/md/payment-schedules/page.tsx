@@ -38,13 +38,13 @@ export default function PaymentSchedulesPage() {
       return
     }
 
-    if (currentUser.role !== "loan_officer") {
+    if (currentUser.role !== "md") {
       router.push("/dashboard")
       return
     }
   }, [isAuthenticated, currentUser, router])
 
-  if (!isAuthenticated || !currentUser || currentUser.role !== "loan_officer") {
+  if (!isAuthenticated || !currentUser || currentUser.role !== "md") {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
