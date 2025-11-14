@@ -53,12 +53,23 @@ const navigationByRole: Record<UserRole, NavSection[]> = {
       ],
     },
   ],
+  loan_officer: [
+    {
+      title: "Loan Officer (Tier 1)",
+      items: [
+        { href: "/loan-officer", label: "Dashboard", icon: LayoutDashboard },
+        { href: "/loan-officer/applications", label: "Review Applications", icon: FileText },
+        { href: "/loan-officer/kyc-review", label: "KYC Review", icon: UserCheck },
+        { href: "/loan-officer/payment-schedules", label: "Payment Schedules", icon: Calendar },
+      ],
+    },
+  ],
   md: [
     {
-      title: "Managing Director",
+      title: "Managing Director (Tier 2)",
       items: [
         { href: "/md", label: "Dashboard", icon: LayoutDashboard },
-        { href: "/md/applications", label: "Loan Applications", icon: FileText },
+        { href: "/md/applications", label: "Loan Approvals", icon: FileText },
         { href: "/md/kyc-review", label: "KYC Review", icon: UserCheck },
         { href: "/md/payment-schedules", label: "Payment Schedules", icon: Calendar },
       ],
@@ -66,7 +77,7 @@ const navigationByRole: Record<UserRole, NavSection[]> = {
   ],
   finance_director: [
     {
-      title: "Finance Director",
+      title: "Finance Director (Tier 3)",
       items: [
         { href: "/finance-director", label: "Dashboard", icon: LayoutDashboard },
         { href: "/finance-director/applications", label: "High-Value Loans", icon: DollarSign },

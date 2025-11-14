@@ -43,6 +43,20 @@
       "updated_at": "2024-01-25T10:00:00Z"
     },
     {
+      "id": "loan-officer-1",
+      "email": "officer@test.com",
+      "password": "officer123",
+      "first_name": "Alex",
+      "last_name": "Martinez",
+      "phone": "+1234567890",
+      "role": "loan_officer",
+      "kyc_status": "verified",
+      "kyc_stage1_completed": true,
+      "kyc_stage1_status": "verified",
+      "created_at": "2024-01-08T10:00:00Z",
+      "updated_at": "2024-01-08T10:00:00Z"
+    },
+    {
       "id": "md-1",
       "email": "md@test.com",
       "password": "md123",

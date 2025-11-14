@@ -208,11 +208,15 @@ export default function AdminDashboard() {
               {[
                 { role: "Borrowers", count: allUsers.filter((u) => u.role === "borrower").length },
                 {
-                  role: "Managing Directors",
+                  role: "Loan Officers (Tier 1)",
+                  count: allUsers.filter((u) => u.role === "loan_officer").length,
+                },
+                {
+                  role: "Managing Directors (Tier 2)",
                   count: allUsers.filter((u) => u.role === "md").length,
                 },
                 {
-                  role: "Finance Directors",
+                  role: "Finance Directors (Tier 3)",
                   count: allUsers.filter((u) => u.role === "finance_director").length,
                 },
                 { role: "Admins", count: allUsers.filter((u) => u.role === "admin").length },

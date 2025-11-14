@@ -25,6 +25,10 @@ export default function DashboardPage() {
     }
 
     // Redirect non-borrowers to their appropriate dashboards
+    if (currentUser.role === "loan_officer") {
+      router.push("/loan-officer")
+      return
+    }
     if (currentUser.role === "md") {
       router.push("/md")
       return

@@ -46,6 +46,7 @@ export function useRequireAuth(options?: {
 function getRoleDashboard(role: UserRole): string {
   const dashboards: Record<UserRole, string> = {
     borrower: "/dashboard",
+    loan_officer: "/loan-officer",
     md: "/md",
     finance_director: "/finance-director",
     admin: "/admin",

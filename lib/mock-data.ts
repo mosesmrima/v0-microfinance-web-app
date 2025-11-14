@@ -441,8 +441,9 @@ export const mockPaymentSchedules: PaymentSchedule[] = [
 export const mockSystemAnalytics: SystemAnalytics = {
   total_users: 1256,
   total_borrowers: 1200,
-  total_mds: 45,
-  total_finance_directors: 10,
+  total_loan_officers: 35,
+  total_mds: 8,
+  total_finance_directors: 3,
   total_admins: 1,
   total_loans: 2840,
   total_disbursement_amount: 28500000,

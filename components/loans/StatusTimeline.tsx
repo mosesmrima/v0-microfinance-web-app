@@ -39,9 +39,14 @@ export function StatusTimeline({ currentStatus, rejectionReason, className }: St
       description: "Documents being verified",
     },
     {
+      status: "pending_loan_officer",
+      label: "Loan Officer Review",
+      description: "Tier 1 review and escalation",
+    },
+    {
       status: "pending_md",
-      label: "MD Review",
-      description: "Managing Director reviewing application",
+      label: "MD Approval",
+      description: "Managing Director approval (Tier 2)",
     },
     {
       status: "pending_finance_director",
@@ -98,6 +103,7 @@ export function StatusTimeline({ currentStatus, rejectionReason, className }: St
       "kyc_stage2_required",
       "submitted",
       "under_review",
+      "pending_loan_officer",
       "pending_md",
       "pending_finance_director",
       "approved",
